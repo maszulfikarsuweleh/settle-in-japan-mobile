@@ -21,12 +21,17 @@ pipeline {
 
         stage('Build APK') {
             steps {
-                sh './gradlew clean assembleDebug' // Builds debug APK
-                // For release APK:
-                // sh './gradlew clean assembleRelease'
-                // For AAB:
-                // sh './gradlew clean bundleRelease'
+                echo "Starting APK build..."
+                sh './gradlew clean assembleDebug'   // or assembleRelease
+                echo "APK build completed!"
             }
+//                 steps {
+//                 sh './gradlew clean assembleDebug' // Builds debug APK
+//                 // For release APK:
+//                 // sh './gradlew clean assembleRelease'
+//                 // For AAB:
+//                 // sh './gradlew clean bundleRelease'
+//             }
         }
 
         stage('Archive Artifacts') {
