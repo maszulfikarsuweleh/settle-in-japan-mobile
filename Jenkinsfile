@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     tools {
-        jdk 'jdk17'  // Make sure this matches your installed JDK in Jenkins
-        gradle 'gradle' // Make sure you have a Gradle installation configured in Jenkins
+        jdk 'jdk17'           // Ensure JDK 17 is installed in Jenkins
+        gradle 'gradle'       // Ensure Gradle is configured
     }
 
     environment {
-        ANDROID_HOME = "/Users/zulfikarsuweleh/Library/Android/sdk" // Adjust if different
+        ANDROID_HOME = "/Users/zulfikarsuweleh/Library/Android/sdk" // Adjust SDK path
         PATH = "${env.ANDROID_HOME}/tools:${env.ANDROID_HOME}/platform-tools:${env.PATH}"
     }
 
@@ -21,29 +21,26 @@ pipeline {
 
         stage('Build APK') {
             steps {
-                // For debug APK
-                sh './gradlew assembleDebug'
-
-                // If you want release APK instead, uncomment:
-                // sh './gradlew assembleRelease'
-
-                // For bundle (AAB), uncomment:
-                // sh './gradlew bundleRelease'
+                sh './gradlew clean assembleDebug' // Builds debug APK
+                // For release APK:
+                // sh './gradlew clean assembleRelease'
+                // For AAB:
+                // sh './gradlew clean bundleRelease'
             }
         }
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: '**/app/build/outputs/**/*.apk', allowEmptyArchive: false
-                // If using AAB:
-                // archiveArtifacts artifacts: '**/app/build/outputs/**/*.aab', allowEmptyArchive: false
+                archiveArtifacts artifacts: 'app/build/outputs/**/*.apk', allowEmptyArchive: false
+                // For AAB:
+                // archiveArtifacts artifacts: 'app/build/outputs/**/*.aab', allowEmptyArchive: false
             }
         }
     }
 
     post {
         success {
-            echo 'Build completed successfully!'
+            echo 'Build and archiving successful!'
         }
         failure {
             echo 'Build failed.'
