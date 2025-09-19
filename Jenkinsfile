@@ -14,6 +14,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                echo "Checkout to master branch..."
                 git branch: 'master',
                     url: 'https://github.com/maszulfikarsuweleh/settle-in-japan-mobile.git'
             }
