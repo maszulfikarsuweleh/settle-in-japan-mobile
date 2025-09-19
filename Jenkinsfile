@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'jdk17'           // Ensure JDK 17 is installed in Jenkins
-        gradle 'gradle'       // Ensure Gradle is configured
-    }
-
     environment {
         ANDROID_HOME = "/Users/zulfikarsuweleh/Library/Android/sdk" // Adjust SDK path
         PATH = "${env.ANDROID_HOME}/tools:${env.ANDROID_HOME}/platform-tools:${env.PATH}"
