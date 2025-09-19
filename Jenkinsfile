@@ -18,7 +18,7 @@ pipeline {
         stage('Build APK') {
             steps {
                 echo "Starting APK build..."
-                sh './gradlew clean assembleDebug'   // or assembleRelease
+                sh './gradlew clean assembleDebug --stacktrace --info'
                 echo "APK build completed!"
             }
 //                 steps {
