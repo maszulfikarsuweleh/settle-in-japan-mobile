@@ -1,68 +1,52 @@
 pipeline {
     agent any
 
-    environment {
-        JAVA_HOME = tool(name: 'jdk17')  // Ensure you defined jdk17 in Jenkins global tools
-        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+    tools {
+        jdk 'jdk17'  // Make sure this matches your installed JDK in Jenkins
+        gradle 'gradle' // Make sure you have a Gradle installation configured in Jenkins
     }
 
-    tools {
-        // Make sure you have Gradle configured in Jenkins or rely on ./gradlew
-        jdk 'jdk17'  // Adjust if your KMP project needs another JDK
+    environment {
+        ANDROID_HOME = "/Users/zulfikarsuweleh/Library/Android/sdk" // Adjust if different
+        PATH = "${env.ANDROID_HOME}/tools:${env.ANDROID_HOME}/platform-tools:${env.PATH}"
     }
 
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/maszulfikarsuweleh/settle-in-japan-mobile.git',
-                    credentialsId: 'your-github-token'
-            }
-        }
-
-        stage('Prepare') {
-            steps {
-                sh 'chmod +x ./gradlew'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh './gradlew clean build'
+                    url: 'https://github.com/maszulfikarsuweleh/settle-in-japan-mobile.git'
             }
         }
 
         stage('Build APK') {
             steps {
-                sh './gradlew :androidApp:assembleRelease'
-            }
-        }
+                // For debug APK
+                sh './gradlew assembleDebug'
 
-        stage('Build AAB') {
-            steps {
-                sh './gradlew :androidApp:bundleRelease'
+                // If you want release APK instead, uncomment:
+                // sh './gradlew assembleRelease'
+
+                // For bundle (AAB), uncomment:
+                // sh './gradlew bundleRelease'
             }
         }
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: 'androidApp/build/outputs/**/*.apk, androidApp/build/outputs/**/*.aab', fingerprint: true
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh './gradlew test'
+                archiveArtifacts artifacts: '**/app/build/outputs/**/*.apk', allowEmptyArchive: false
+                // If using AAB:
+                // archiveArtifacts artifacts: '**/app/build/outputs/**/*.aab', allowEmptyArchive: false
             }
         }
     }
 
     post {
         success {
-            echo "✅ Build successful!"
+            echo 'Build completed successfully!'
         }
         failure {
-            echo "❌ Build failed!"
+            echo 'Build failed.'
         }
     }
 }
