@@ -32,6 +32,24 @@ pipeline {
             }
         }
 
+        stage('Build APK') {
+            steps {
+                sh './gradlew :androidApp:assembleRelease'
+            }
+        }
+
+        stage('Build AAB') {
+            steps {
+                sh './gradlew :androidApp:bundleRelease'
+            }
+        }
+
+        stage('Archive Artifacts') {
+            steps {
+                archiveArtifacts artifacts: 'androidApp/build/outputs/**/*.apk, androidApp/build/outputs/**/*.aab', fingerprint: true
+            }
+        }
+
         stage('Test') {
             steps {
                 sh './gradlew test'
