@@ -22,4 +22,12 @@ class AuthRepositoryImpl(
             Result.failure(e)
         }
     }
+
+    override suspend fun greeting(): Result<String> = runCatching {
+        return try {
+            Result.success(authApiService.testKtor())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

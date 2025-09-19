@@ -51,19 +51,31 @@ kotlin {
         val commonMain = commonMain.get() // Get commonMain once
 
         androidMain.dependencies {
+            // Koin Android specific (for context, Android specific ViewModels if any)
+            implementation(libs.koin.android) // Or latest version
+            // If your ViewModels are true androidx.lifecycle.ViewModel
+            implementation(libs.androidx.lifecycle.viewmodel.ktx) // Or latest
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.cio)
+            implementation(libs.koin.android) // Koin for Android
         }
         commonMain.dependencies {
+            implementation(libs.koin.core) // Or latest version
+
+            // Koin for Compose Multiplatform (provides koinViewModel, koinInject etc. for Compose)
+            implementation(libs.koin.compose) // Or latest version for Koin 3.5.x
+            implementation(libs.koin.compose.viewmodel)
+//            implementation(libs.androidx.lifecycle.viewmodel)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
+//            implementation(libs.androidx.lifecycle.viewmodelCompose)
+//            implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(projects.shared)
 
             implementation(libs.ktor.client.core)

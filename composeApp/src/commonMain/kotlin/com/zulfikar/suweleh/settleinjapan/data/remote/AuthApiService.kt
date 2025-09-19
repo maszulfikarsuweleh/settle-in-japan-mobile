@@ -5,8 +5,10 @@ import com.zulfikar.suweleh.settleinjapan.data.remote.dto.LoginResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
@@ -14,6 +16,7 @@ import kotlinx.serialization.json.Json
 
 interface AuthApiService {
     suspend fun login(loginRequest: LoginRequest): LoginResponse
+    suspend fun testKtor(): String
 }
 
 class AuthApiServiceImpl : AuthApiService {
@@ -33,15 +36,21 @@ class AuthApiServiceImpl : AuthApiService {
 
     override suspend fun login(loginRequest: LoginRequest): LoginResponse {
         return try {
-            client.post("$baseUrl/auth/login") {
+            val response = client.post("$baseUrl/auth/login") {
                 contentType(ContentType.Application.Json)
                 setBody(loginRequest)
             }.body<LoginResponse>()
+            response
         } catch (e: Exception) {
             // Basic error handling, consider a more robust error handling strategy for production
             // e.g., mapping to a custom error class or sealed interface
             // Ensure LoginResponse has a constructor that matches this usage if you customize it
             LoginResponse(message = "Login failed: ${e.message}")
         }
+    }
+
+    override suspend fun testKtor(): String {
+        val response = client.get("https://ktor.io/docs/")
+        return response.bodyAsText()
     }
 }

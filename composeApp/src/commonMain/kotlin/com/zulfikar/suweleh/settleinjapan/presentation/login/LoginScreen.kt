@@ -6,10 +6,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.zulfikar.suweleh.settleinjapan.di.AppModule
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel = AppModule.provideLoginViewModel()) {
+fun LoginScreen(loginViewModel: LoginViewModel = koinViewModel()) {
 
     val uiState by loginViewModel.uiState.collectAsState()
     val username by loginViewModel.username.collectAsState()
@@ -63,6 +63,9 @@ fun LoginScreen(loginViewModel: LoginViewModel = AppModule.provideLoginViewModel
 
         // Display messages based on UI state
         when (val state = uiState) {
+            is LoginUiState.SuccessGreeting -> {
+                Text("Login Successful! Token: ${state.response}", color = MaterialTheme.colorScheme.primary)
+            }
             is LoginUiState.Success -> {
                 Text("Login Successful! Token: ${state.loginResponse.token}", color = MaterialTheme.colorScheme.primary)
                 // You might want to navigate to another screen here
