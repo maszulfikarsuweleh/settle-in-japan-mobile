@@ -32,7 +32,7 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: 'app/build/outputs/apk/**/*.apk', fingerprint: true
+                archiveArtifacts artifacts: 'app/build/outputs/apk/debug/*.apk', fingerprint: true
                 // For AAB:
                 // archiveArtifacts artifacts: 'app/build/outputs/**/*.aab', allowEmptyArchive: false
             }
