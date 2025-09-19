@@ -2,38 +2,53 @@ pipeline {
     agent any
 
     tools {
-        // Make sure you have Gradle configured in Jenkins or rely on ./gradlew
-        jdk 'jdk17'  // Adjust if your KMP project needs another JDK
+        jdk 'jdk17'           // Ensure JDK 17 is installed in Jenkins
+        gradle 'gradle'       // Ensure Gradle is configured
+    }
+
+    environment {
+        ANDROID_HOME = "/Users/zulfikarsuweleh/Library/Android/sdk" // Adjust SDK path
+        PATH = "${env.ANDROID_HOME}/tools:${env.ANDROID_HOME}/platform-tools:${env.PATH}"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/maszulfikarsuweleh/settle-in-japan-mobile.git',
-                    credentialsId: 'your-github-token'
+                git branch: 'master',
+                    url: 'https://github.com/maszulfikarsuweleh/settle-in-japan-mobile.git'
             }
         }
 
-        stage('Build') {
+        stage('Build APK') {
             steps {
-                sh './gradlew clean build'
+                echo "Starting APK build..."
+                sh './gradlew clean assembleDebug'   // or assembleRelease
+                echo "APK build completed!"
             }
+//                 steps {
+//                 sh './gradlew clean assembleDebug' // Builds debug APK
+//                 // For release APK:
+//                 // sh './gradlew clean assembleRelease'
+//                 // For AAB:
+//                 // sh './gradlew clean bundleRelease'
+//             }
         }
 
-        stage('Test') {
+        stage('Archive Artifacts') {
             steps {
-                sh './gradlew test'
+                archiveArtifacts artifacts: 'app/build/outputs/**/*.apk', allowEmptyArchive: false
+                // For AAB:
+                // archiveArtifacts artifacts: 'app/build/outputs/**/*.aab', allowEmptyArchive: false
             }
         }
     }
 
     post {
         success {
-            echo "✅ Build successful!"
+            echo 'Build and archiving successful!'
         }
         failure {
-            echo "❌ Build failed!"
+            echo 'Build failed.'
         }
     }
 }
