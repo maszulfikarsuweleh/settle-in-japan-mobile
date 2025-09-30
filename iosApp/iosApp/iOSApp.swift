@@ -3,9 +3,9 @@ import ComposeApp
 
 @main
 struct iOSApp: App {
-    // init() {
-    //     KoinIOS.doInitKoin()
-    // }
+    init() {
+        KoinIOS.shared.doInit()
+    }
     var body: some Scene {
         WindowGroup {
             ContentView()

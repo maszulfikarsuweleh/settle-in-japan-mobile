@@ -4,7 +4,6 @@ import com.zulfikar.suweleh.settleinjapan.data.remote.AuthApiService
 import com.zulfikar.suweleh.settleinjapan.data.remote.AuthApiServiceImpl
 import com.zulfikar.suweleh.settleinjapan.data.repository.AuthRepository
 import com.zulfikar.suweleh.settleinjapan.data.repository.AuthRepositoryImpl
-import com.zulfikar.suweleh.settleinjapan.domain.usecase.GreetingUseCase
 import com.zulfikar.suweleh.settleinjapan.domain.usecase.LoginUseCase
 import com.zulfikar.suweleh.settleinjapan.presentation.login.LoginViewModel
 import org.koin.core.module.dsl.factoryOf
@@ -20,7 +19,6 @@ val commonModule = module {
 
     // Domain Layer
     singleOf(::LoginUseCase)
-    singleOf(::GreetingUseCase)
 
     // Presentation Layer
     // For ViewModels, it's common to use viewModelOf if using Koin's ViewModel integration,

@@ -1,6 +1,7 @@
 package com.zulfikar.suweleh.settleinjapan
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import com.zulfikar.suweleh.settleinjapan.presentation.login.LoginScreen // Added import
@@ -9,6 +10,11 @@ import com.zulfikar.suweleh.settleinjapan.presentation.login.LoginScreen // Adde
 @Preview
 fun App() {
     MaterialTheme {
-        LoginScreen() // Replaced original content with LoginScreen
+        var isLoggedIn by remember { mutableStateOf(false) }
+        if (isLoggedIn) {
+            Text("Welcome you are logged in")
+        } else {
+            LoginScreen() // Replaced original content with LoginScreen
+        }
     }
 }

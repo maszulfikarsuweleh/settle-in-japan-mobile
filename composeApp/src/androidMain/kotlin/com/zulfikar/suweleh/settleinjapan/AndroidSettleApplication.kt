@@ -2,6 +2,7 @@ package com.zulfikar.suweleh.settleinjapan
 
 import android.app.Application
 import com.zulfikar.suweleh.settleinjapan.di.commonModule
+import com.zulfikar.suweleh.settleinjapan.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -15,6 +16,7 @@ class AndroidSettleApplication : Application() {
             androidContext(this@AndroidSettleApplication)
             androidLogger(level = Level.DEBUG)
             modules(commonModule)
+            modules(networkModule)
         }
     }
 }

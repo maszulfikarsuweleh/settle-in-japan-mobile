@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zulfikar.suweleh.settleinjapan.data.remote.dto.LoginRequest
 import com.zulfikar.suweleh.settleinjapan.data.remote.dto.LoginResponse
-import com.zulfikar.suweleh.settleinjapan.domain.usecase.GreetingUseCase
 import com.zulfikar.suweleh.settleinjapan.domain.usecase.LoginUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,8 +20,7 @@ sealed interface LoginUiState {
 }
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase,
-    private val greetingUseCase: GreetingUseCase
+    private val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
@@ -42,25 +40,11 @@ class LoginViewModel(
         _password.value = newPassword
     }
 
-    fun greeting() {
-        viewModelScope.launch {
-            _uiState.value = LoginUiState.Loading
-            greetingUseCase()
-                .onSuccess {
-                    _uiState.value = LoginUiState.SuccessGreeting(it)
-                }
-                .onFailure {
-                    _uiState.value = LoginUiState.Error(it.message ?: "An unknown error occurred")
-                }
-        }
-    }
-
     fun login() {
         viewModelScope.launch {
             _uiState.value = LoginUiState.Loading
-//            val request = LoginRequest(username = _username.value, password = _password.value)
-//            val request = LoginRequest(username = "qa", password = "1")
-            loginUseCase(LoginRequest(username = "qa", password = "1"))
+            val request = LoginRequest(username = _username.value, password = _password.value)
+            loginUseCase(request)
                 .onSuccess { response ->
                     _uiState.value = LoginUiState.Success(response)
                 }

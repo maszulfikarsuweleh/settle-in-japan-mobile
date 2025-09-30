@@ -16,7 +16,6 @@ import kotlinx.serialization.json.Json
 
 interface AuthApiService {
     suspend fun login(loginRequest: LoginRequest): LoginResponse
-    suspend fun testKtor(): String
 }
 
 class AuthApiServiceImpl : AuthApiService {
@@ -47,10 +46,5 @@ class AuthApiServiceImpl : AuthApiService {
             // Ensure LoginResponse has a constructor that matches this usage if you customize it
             LoginResponse(message = "Login failed: ${e.message}")
         }
-    }
-
-    override suspend fun testKtor(): String {
-        val response = client.get("https://ktor.io/docs/")
-        return response.bodyAsText()
     }
 }
